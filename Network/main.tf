@@ -41,3 +41,20 @@ resource "aws_subnet" "private_subnets" {
     "Name" = "Private-Subnet-${count.index+1}"
   }
 }
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.dev_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw_dev.id
+  }
+  tags = {
+    Name = "route-public-subnets"
+  }
+}
+
+resource "aws_route_table_association" "public_routes" {
+  count          = length(aws_subnet.public_subnets[*].id)
+  route_table_id = aws_route_table.public_rt.id
+  subnet_id      = aws_subnet.public_subnets[count.index].id
+}
