@@ -9,3 +9,11 @@ resource "aws_vpc" "dev_vpc" {
     Name = "VPC Prod"
   }
 }
+
+resource "aws_internet_gateway" "igw_dev" {
+  vpc_id = aws_vpc.dev_vpc.id
+
+  tags = {
+    "Name" = "igw"
+  }
+}
