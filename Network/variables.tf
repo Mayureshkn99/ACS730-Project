@@ -9,3 +9,9 @@ variable "public_cidr_blocks" {
   type        = list(string)
   description = "Public Subnet CIDRs"
 }
+
+variable "private_cidr_blocks" {
+  default     = ["10.1.5.0/24", "10.1.6.0/24"]
+  type        = list(string)
+  description = "Private Subnet CIDRs"
+}
