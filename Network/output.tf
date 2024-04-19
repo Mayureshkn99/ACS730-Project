@@ -1,15 +1,15 @@
 output "public_subnet_id" {
-  value = aws_subnet.public_subnets[*].id
+  value = module.vpc-dev.public_subnet_id
 }
 
 output "private_subnet_id" {
-  value = aws_subnet.private_subnets[*].id
+  value = module.vpc-dev.private_subnet_id
 }
 
 output "route_table_id" {
-  value = aws_route_table.public_rt.id
+  value = module.vpc-dev.route_table_id
 }
 
 output "vpc_id" {
-  value = aws_vpc.dev_vpc.id
+  value = module.vpc-dev.vpc_id
 }
