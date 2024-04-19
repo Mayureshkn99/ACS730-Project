@@ -5,26 +5,26 @@ resource "aws_security_group" "public_webservers_sg" {
   vpc_id      = data.terraform_remote_state.networking.outputs.vpc_id
 
   ingress {
-    description      = "Allow inbound HTTP traffic"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "Allow inbound HTTP traffic"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    description      = "Allow inbound SSH traffic"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "Allow inbound SSH traffic"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = merge(local.default_tags,
@@ -49,10 +49,10 @@ resource "aws_security_group" "private_webservers_sg" {
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = merge(local.default_tags,
