@@ -1,0 +1,84 @@
+name: "Terraform - Staging"
+
+on:
+  push:
+    branches:
+    - feature/git-workflow
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+    terraform-destroy-network:
+    name: "Terraform Destroy Network"
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ASIA3CDEULUKMELT3Y7U
+      AWS_SECRET_ACCESS_KEY: s7SitAdrQFT55oJnUv3VIXjFHFvfFtNxwDPwQmFT
+      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEM7//////////wEaCXVzLXdlc3QtMiJHMEUCIQDeCExZqIP1BKCnmnhliqfrM6BvVsz+KkWft6c6BwHrQQIgSU90q5DK59A5WOoMXKy2deO016ozK7uwl5clL6kNPV8qrAIIFxAAGgw3NjA0MjAyNjExNDAiDItdyHYTMKPSbLhJCSqJAq1Ko8pF9XXJ5VIy86ksNXJ7eJA+aM6zTfpcBIF3Dm84Xq0gWPMVoRgIcib74JZYBrvPWiwC+elhHOS7qdddhbL+No4CQnebGQXDIm1Z93l77Qrq8w9Yk7n+c5Upmm2UtcaEUFsHeB//Psl3hG35KQ0yYWkKB3CL4tcx9+YIOk7O0NS4wR6RJT3Y0e6VL15+6f/OO7D7zQdtVu3QqH/SJpBOo5gJ83eqAhwIqXGKhq01DK7+pK/9rCHL4eisKfuphVC6yh5Lbc0WpFUBQey8VArPY+mQkQz2LNvB6F+iujCnH/QQU4I/FKS3huG7deJfYbTkcCPnxX8F2Oa0JKSGiGHVsEf/nlzGlA0w6eyJsQY6nQHx62KxVwlYXDGTUW5rlgV28xvPFDrunUfIki6QKlxNq0lbwWvWDMpCAGqzxqOw66uD2Vu7cwyfFXc7TJWr8rkNZt6wNcIq9/Nol3625Fwf2XalXZJOlUrAHq/G4Yc1RkBbroBKvpc5zu2F4T77ddmTdu7tZvRx/jUUNzO45wRZDULpjtqVkMjZi4yNxEx+39bOyiPYugCHIOVb1beK
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+          terraform_wrapper: true
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./Network
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+        working-directory: ./Network
+
+
+  terraform-provision-network:
+    name: "Terraform Provision Network"
+    needs: terraform-destroy-network
+    runs-on: ubuntu-latest
+    env:
+    #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      AWS_ACCESS_KEY_ID: ASIA3CDEULUKMELT3Y7U
+      AWS_SECRET_ACCESS_KEY: s7SitAdrQFT55oJnUv3VIXjFHFvfFtNxwDPwQmFT
+      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEM7//////////wEaCXVzLXdlc3QtMiJHMEUCIQDeCExZqIP1BKCnmnhliqfrM6BvVsz+KkWft6c6BwHrQQIgSU90q5DK59A5WOoMXKy2deO016ozK7uwl5clL6kNPV8qrAIIFxAAGgw3NjA0MjAyNjExNDAiDItdyHYTMKPSbLhJCSqJAq1Ko8pF9XXJ5VIy86ksNXJ7eJA+aM6zTfpcBIF3Dm84Xq0gWPMVoRgIcib74JZYBrvPWiwC+elhHOS7qdddhbL+No4CQnebGQXDIm1Z93l77Qrq8w9Yk7n+c5Upmm2UtcaEUFsHeB//Psl3hG35KQ0yYWkKB3CL4tcx9+YIOk7O0NS4wR6RJT3Y0e6VL15+6f/OO7D7zQdtVu3QqH/SJpBOo5gJ83eqAhwIqXGKhq01DK7+pK/9rCHL4eisKfuphVC6yh5Lbc0WpFUBQey8VArPY+mQkQz2LNvB6F+iujCnH/QQU4I/FKS3huG7deJfYbTkcCPnxX8F2Oa0JKSGiGHVsEf/nlzGlA0w6eyJsQY6nQHx62KxVwlYXDGTUW5rlgV28xvPFDrunUfIki6QKlxNq0lbwWvWDMpCAGqzxqOw66uD2Vu7cwyfFXc7TJWr8rkNZt6wNcIq9/Nol3625Fwf2XalXZJOlUrAHq/G4Yc1RkBbroBKvpc5zu2F4T77ddmTdu7tZvRx/jUUNzO45wRZDULpjtqVkMjZi4yNxEx+39bOyiPYugCHIOVb1beK
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+          terraform_wrapper: true
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt 
+        continue-on-error: true
+        working-directory: ./Network
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./Network
+
+      - name: Terraform Validate
+        run: terraform validate -no-color
+        working-directory: ./Network
+    
+      - name: Terraform Plan
+        run: terraform plan -input=false -no-color -out tf.plan
+        continue-on-error: true
+        working-directory: ./Network
+
+      - name: Get result
+        run: echo "${{ steps.validate.outputs.stdout }}"
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./Network
+        
