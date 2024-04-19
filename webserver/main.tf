@@ -80,7 +80,8 @@ resource "aws_instance" "public_webservers" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${var.prefix}-public-webserver-${count.index + 1}"
+      "Name" = "${var.prefix}-public-webserver-${count.index + 1}",
+      "Usage" = count.index >= 2 && count.index <= 3 ? "Ansible" : "Terraform"
     }
   )
 }
