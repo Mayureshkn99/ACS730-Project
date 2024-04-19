@@ -12,14 +12,13 @@ terraform {
   required_version = ">=0.14"
 }
 provider "aws" {
-  profile = "default"
   region  = "us-east-1"
 }
 
 data "terraform_remote_state" "networking" { // This is to use Outputs from Remote State
   backend = "s3"
   config = {
-    bucket = "dev-group5-s3-acs"         // Bucket from where to GET Terraform State
+    bucket = "dev-group5-s3"         // Bucket from where to GET Terraform State
     key    = "Network/terraform.tfstate" // Region where bucket created
     region = "us-east-1"
   }
