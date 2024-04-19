@@ -1,0 +1,24 @@
+name: TFSec Scan
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  tfsec_scan:
+    name: "tfsec Scan"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install tfsec
+        run: |
+          curl -L -o tfsec https://github.com/tfsec/tfsec/releases/latest/download/tfsec-linux-amd64
+          chmod +x tfsec
+          sudo mv tfsec /usr/local/bin/
+
+      - name: Run tfsec scan
+        run: tfsec .
