@@ -3,7 +3,7 @@ name: "Terraform - Staging"
 on:
   push:
     branches:
-    - feature/git-workflow
+    - staging
 
 permissions:
   contents: read

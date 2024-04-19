@@ -3,7 +3,7 @@ name: TFSec Scan
 on:
   push:
     branches:
-      - feature/git-workflow
+      - staging
 
 jobs:
   tfsec_scan:
