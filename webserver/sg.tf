@@ -45,7 +45,8 @@ resource "aws_security_group" "private_webservers_sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.public_webservers_sg.id]
+    cidr_blocks = ["${aws_instance.public_webservers[1].private_ip}/32"]
+    # security_groups = [aws_security_group.public_webservers_sg.id]
   }
 
   egress {

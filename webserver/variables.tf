@@ -1,11 +1,8 @@
 # Instance type
 variable "instance_type" {
-  default = {
-    "prod" = "t2.small"
-    "dev"  = "t3.small"
-  }
+  default     = "t2.micro"
+  type        = string
   description = "Type of the instance"
-  type        = map(string)
 }
 
 # Default tags
@@ -23,11 +20,4 @@ variable "prefix" {
   default     = "group5"
   type        = string
   description = "Name prefix"
-}
-
-# Variable to signal the current environment 
-variable "env" {
-  default     = "dev"
-  type        = string
-  description = "Deployment Environment"
 }
