@@ -18,7 +18,7 @@ provider "aws" {
 data "terraform_remote_state" "networking" { // This is to use Outputs from Remote State
   backend = "s3"
   config = {
-    bucket = "dev-group5-s3"         // Bucket from where to GET Terraform State
+    bucket = "dev-group5-s3" // Bucket from where to GET Terraform State
     key    = "Network/terraform.tfstate"
     region = "us-east-1" // Region where bucket created
   }
@@ -72,7 +72,7 @@ resource "aws_instance" "public_webservers" {
   security_groups             = [aws_security_group.public_webservers_sg.id]
   subnet_id                   = data.terraform_remote_state.networking.outputs.public_subnet_id[count.index]
   associate_public_ip_address = true
-  user_data = count.index < 2 ? templatefile("install_httpd.sh",
+  user_data = count.index < 2 ? templatefile("${path.module}/install_httpd.sh",
     {
       prefix = upper(var.prefix)
     }
@@ -80,7 +80,8 @@ resource "aws_instance" "public_webservers" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${var.prefix}-public-webserver-${count.index + 1}"
+      "Name"  = "${var.prefix}-public-webserver-${count.index + 1}",
+      "Usage" = count.index >= 2 && count.index <= 3 ? "Ansible" : "Terraform"
     }
   )
 }
@@ -88,5 +89,5 @@ resource "aws_instance" "public_webservers" {
 # Adding SSH key to be used by EC2 instance
 resource "aws_key_pair" "ssh_keypair" {
   key_name   = "keypair"
-  public_key = file("projectkey.pub")
+  public_key = file("${path.root}/projectkey.pub")
 }
