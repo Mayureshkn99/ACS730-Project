@@ -22,7 +22,7 @@ This project provisions an AWS infrastructure using Terraform and configures it 
 - **Git and GitHub**: Version control is managed using Git and hosted on GitHub.
 - **Branches**: Separate branches are utilized for different environments, including production, staging, and development.
 
-## Instructions to Run the Code
+## Instructions to Run Terraform Code
 
 1. **Update AWS Credentials**:
    - Set AWS credentials as environment variables.
@@ -44,7 +44,7 @@ This project provisions an AWS infrastructure using Terraform and configures it 
 
 5. **Navigate to Webserver Directory**:
    ```
-   cd ../webserver
+   cd ../Webserver
    ```
 
 6. **Generate SSH Key**:
