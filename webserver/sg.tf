@@ -41,10 +41,10 @@ resource "aws_security_group" "private_webservers_sg" {
   vpc_id      = data.terraform_remote_state.networking.outputs.vpc_id
 
   ingress {
-    description     = "SSH from public subnet"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
+    description = "SSH from public subnet"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = ["${aws_instance.public_webservers[1].private_ip}/32"]
     # security_groups = [aws_security_group.public_webservers_sg.id]
   }
