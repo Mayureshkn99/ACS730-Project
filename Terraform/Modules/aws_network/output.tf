@@ -11,5 +11,5 @@ output "route_table_id" {
 }
 
 output "vpc_id" {
-  value = aws_vpc.dev_vpc.id
+  value = aws_vpc.main_vpc.id
 }

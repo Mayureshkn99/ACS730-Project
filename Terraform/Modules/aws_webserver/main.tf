@@ -18,7 +18,7 @@ provider "aws" {
 data "terraform_remote_state" "networking" { // This is to use Outputs from Remote State
   backend = "s3"
   config = {
-    bucket = "dev-group5-s3" // Bucket from where to GET Terraform State
+    bucket = "${var.env}-group5-s3" // Bucket from where to GET Terraform State
     key    = "Network/terraform.tfstate"
     region = "us-east-1" // Region where bucket created
   }
@@ -42,7 +42,7 @@ data "aws_availability_zones" "available" {
 # Define tags locally
 locals {
   default_tags = var.default_tags
-  name_prefix  = var.prefix
+  name_prefix  = "${var.env}-${var.prefix}"
 
 }
 
@@ -58,7 +58,7 @@ resource "aws_instance" "private_webservers" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${var.prefix}-private-webserver-${count.index + 1}"
+      "Name" = "${local.name_prefix}-private-webserver-${count.index + 1}"
     }
   )
 }
@@ -80,7 +80,7 @@ resource "aws_instance" "public_webservers" {
 
   tags = merge(local.default_tags,
     {
-      "Name"  = "${var.prefix}-public-webserver-${count.index + 1}",
+      "Name"  = "${local.name_prefix}-public-webserver-${count.index + 1}",
       "Usage" = count.index >= 2 && count.index <= 3 ? "Ansible" : "Terraform"
     }
   )
@@ -88,6 +88,6 @@ resource "aws_instance" "public_webservers" {
 
 # Adding SSH key to be used by EC2 instance
 resource "aws_key_pair" "ssh_keypair" {
-  key_name   = "keypair"
+  key_name   = "${var.env}-keypair"
   public_key = file("${path.root}/projectkey.pub")
 }
