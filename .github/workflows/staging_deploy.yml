@@ -14,9 +14,9 @@ jobs:
     name: "Terraform Destroy Webserver"
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ASIA3CDEULUKJV4NO2WX
-      AWS_SECRET_ACCESS_KEY: JiGKsiiwyv3n7vpVn58gQzm0U73hWymqvBBHshcY
-      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEOn//////////wEaCXVzLXdlc3QtMiJIMEYCIQCBtaP2KmpmNCqKo9l7hylYIEQTVwkXeIoXJu4YbKgJhwIhAN7x8jYMiwcwEExyN2IG7jwT8TUB1P7wqzKjazeqMwgxKqwCCDIQABoMNzYwNDIwMjYxMTQwIgzcKh/Bop6IrVKi7rwqiQLqbFu0YYLk+ZIM6KGMqEijqnz0t2vlYZdsY7s8AoCPeA1kjwqzFEWEHjqjSNFmuwOQDg8sSApycLPexQV/HzatZ4HEIPNTT3sUr+GwVRngCBDuW3JWCFguZ7wG3pH9VJ1+tGYdMkkDrkc8O3k4arn9h6THwR3Zl+guSkJoZW/9BG7lxLHG/SfbSCmVpg7ubmLVl0XdXRylqtq6pu3FQyg0oeZ98Mk/L7uug62tu6rbJaLAmX7nZ5KW1ZAOeP3Ae6DNM3u1RnrWdVo3K4g7jrRIALX01WR5Oln6gtDyDpqBI8+r1QoTac5YIiMsBdybOS8f+h3g8j3SWWTdc0DIQYNkAQ3XE9COAbrrMO/rj7EGOpwBHzrTmlhLzR6m8bgFhtGa3MKDRn2CseAkvPVi3xGuXgKKevYNxT2e9Xrz71/SSn2egeu5k7RRiWpje89maZe4jGFl8B8O1l2zLo6doPzM7eg0yw7UdHQ7qVxHz6yQ5JaHr55d6JuZtGueBkYmaaMuSIg336jyBeYk04p+1TAjcpWTjUxc7Vy5bjbh0dh1aPe97gc55Gbh2bWxhF2g
+      AWS_ACCESS_KEY_ID: ASIA3CDEULUKCE4ELWUK
+      AWS_SECRET_ACCESS_KEY: 2Rud9W/At4QRTDqhX+DSiWVrdAfreKiOI5KpUr4Q
+      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEO///////////wEaCXVzLXdlc3QtMiJHMEUCIQCP0ArxxIWJG4auhgZfU53ZfqPZM7nKucFoDM9sJx0FdgIgW5Xqe6/fZAdpd/gJed5WpbzLS53LPJOgkG09ol+zsEYqrAIIOBAAGgw3NjA0MjAyNjExNDAiDCEfsfL3vGgOrxZLEyqJAsv4n5oky6Wtl9ZX75vkRrr1ETRtMS3es0L5p1YsYpbgQqo0qCgT0jQEOGugCL9204htdxZBPKPCzfcB0C/Te7SFbzGqjmMpKcff0deryAgqQbcN+Yi0Oyyu9rjxlTmZUzsNUgAnFmDwoCs5bPN5/DXfj47MqY2hmA3i3hLZK47JMV8EelggDU00wNiDXjUv/kg5ZPnZ2AE+nEzq0yjbLKugdJDcmk9R1fhBwPSZT9tdtPjO2nzMTaBD+gt3Hz4nEr9sX+BPh7XdEwA87fBP5t6uO8YvLWZ5w0rq15lVUzUSC8Z4MKLF6FWfa9L4j0PIPuOMqa/Q1pE2hJTI+CE0wYUZlubjwMjmPY0w1JGRsQY6nQHX02V+fNFUxt41QqquHSUlxB/NpANQNhslJU/x76ql4tLLknPOdqARyjfoj29Mea7v7ouip488QV/1AzJ4OX7Y8pL6uTYjPGol+jObjVn0OdWwc3VJ3+xJxXuygb3UnvyBcrJqKqZamAHZHxqzPgsdVbaPPFVcYxNcDSnBGeBbKCRtj98sJ67zY6PWt3XeyJ4cDqw51HHj1k8nuC4g
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,26 +29,26 @@ jobs:
 
       - name: Setup SSH
         run: |
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Webserver/projectkey.pub
-          chmod 600 ./Webserver/projectkey.pub
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Terraform/Staging/Webserver/projectkey.pub
+          chmod 600 ./Terraform/Staging/Webserver/projectkey.pub
         shell: bash
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
 
   terraform-destroy-network:
     name: "Terraform Destroy Network"
     needs: terraform-destroy-webserver
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ASIA3CDEULUKJV4NO2WX
-      AWS_SECRET_ACCESS_KEY: JiGKsiiwyv3n7vpVn58gQzm0U73hWymqvBBHshcY
-      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEOn//////////wEaCXVzLXdlc3QtMiJIMEYCIQCBtaP2KmpmNCqKo9l7hylYIEQTVwkXeIoXJu4YbKgJhwIhAN7x8jYMiwcwEExyN2IG7jwT8TUB1P7wqzKjazeqMwgxKqwCCDIQABoMNzYwNDIwMjYxMTQwIgzcKh/Bop6IrVKi7rwqiQLqbFu0YYLk+ZIM6KGMqEijqnz0t2vlYZdsY7s8AoCPeA1kjwqzFEWEHjqjSNFmuwOQDg8sSApycLPexQV/HzatZ4HEIPNTT3sUr+GwVRngCBDuW3JWCFguZ7wG3pH9VJ1+tGYdMkkDrkc8O3k4arn9h6THwR3Zl+guSkJoZW/9BG7lxLHG/SfbSCmVpg7ubmLVl0XdXRylqtq6pu3FQyg0oeZ98Mk/L7uug62tu6rbJaLAmX7nZ5KW1ZAOeP3Ae6DNM3u1RnrWdVo3K4g7jrRIALX01WR5Oln6gtDyDpqBI8+r1QoTac5YIiMsBdybOS8f+h3g8j3SWWTdc0DIQYNkAQ3XE9COAbrrMO/rj7EGOpwBHzrTmlhLzR6m8bgFhtGa3MKDRn2CseAkvPVi3xGuXgKKevYNxT2e9Xrz71/SSn2egeu5k7RRiWpje89maZe4jGFl8B8O1l2zLo6doPzM7eg0yw7UdHQ7qVxHz6yQ5JaHr55d6JuZtGueBkYmaaMuSIg336jyBeYk04p+1TAjcpWTjUxc7Vy5bjbh0dh1aPe97gc55Gbh2bWxhF2g
+      AWS_ACCESS_KEY_ID: ASIA3CDEULUKCE4ELWUK
+      AWS_SECRET_ACCESS_KEY: 2Rud9W/At4QRTDqhX+DSiWVrdAfreKiOI5KpUr4Q
+      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEO///////////wEaCXVzLXdlc3QtMiJHMEUCIQCP0ArxxIWJG4auhgZfU53ZfqPZM7nKucFoDM9sJx0FdgIgW5Xqe6/fZAdpd/gJed5WpbzLS53LPJOgkG09ol+zsEYqrAIIOBAAGgw3NjA0MjAyNjExNDAiDCEfsfL3vGgOrxZLEyqJAsv4n5oky6Wtl9ZX75vkRrr1ETRtMS3es0L5p1YsYpbgQqo0qCgT0jQEOGugCL9204htdxZBPKPCzfcB0C/Te7SFbzGqjmMpKcff0deryAgqQbcN+Yi0Oyyu9rjxlTmZUzsNUgAnFmDwoCs5bPN5/DXfj47MqY2hmA3i3hLZK47JMV8EelggDU00wNiDXjUv/kg5ZPnZ2AE+nEzq0yjbLKugdJDcmk9R1fhBwPSZT9tdtPjO2nzMTaBD+gt3Hz4nEr9sX+BPh7XdEwA87fBP5t6uO8YvLWZ5w0rq15lVUzUSC8Z4MKLF6FWfa9L4j0PIPuOMqa/Q1pE2hJTI+CE0wYUZlubjwMjmPY0w1JGRsQY6nQHX02V+fNFUxt41QqquHSUlxB/NpANQNhslJU/x76ql4tLLknPOdqARyjfoj29Mea7v7ouip488QV/1AzJ4OX7Y8pL6uTYjPGol+jObjVn0OdWwc3VJ3+xJxXuygb3UnvyBcrJqKqZamAHZHxqzPgsdVbaPPFVcYxNcDSnBGeBbKCRtj98sJ67zY6PWt3XeyJ4cDqw51HHj1k8nuC4g
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -61,11 +61,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
 
 
   terraform-provision-network:
@@ -74,9 +74,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
     #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      AWS_ACCESS_KEY_ID: ASIA3CDEULUKJV4NO2WX
-      AWS_SECRET_ACCESS_KEY: JiGKsiiwyv3n7vpVn58gQzm0U73hWymqvBBHshcY
-      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEOn//////////wEaCXVzLXdlc3QtMiJIMEYCIQCBtaP2KmpmNCqKo9l7hylYIEQTVwkXeIoXJu4YbKgJhwIhAN7x8jYMiwcwEExyN2IG7jwT8TUB1P7wqzKjazeqMwgxKqwCCDIQABoMNzYwNDIwMjYxMTQwIgzcKh/Bop6IrVKi7rwqiQLqbFu0YYLk+ZIM6KGMqEijqnz0t2vlYZdsY7s8AoCPeA1kjwqzFEWEHjqjSNFmuwOQDg8sSApycLPexQV/HzatZ4HEIPNTT3sUr+GwVRngCBDuW3JWCFguZ7wG3pH9VJ1+tGYdMkkDrkc8O3k4arn9h6THwR3Zl+guSkJoZW/9BG7lxLHG/SfbSCmVpg7ubmLVl0XdXRylqtq6pu3FQyg0oeZ98Mk/L7uug62tu6rbJaLAmX7nZ5KW1ZAOeP3Ae6DNM3u1RnrWdVo3K4g7jrRIALX01WR5Oln6gtDyDpqBI8+r1QoTac5YIiMsBdybOS8f+h3g8j3SWWTdc0DIQYNkAQ3XE9COAbrrMO/rj7EGOpwBHzrTmlhLzR6m8bgFhtGa3MKDRn2CseAkvPVi3xGuXgKKevYNxT2e9Xrz71/SSn2egeu5k7RRiWpje89maZe4jGFl8B8O1l2zLo6doPzM7eg0yw7UdHQ7qVxHz6yQ5JaHr55d6JuZtGueBkYmaaMuSIg336jyBeYk04p+1TAjcpWTjUxc7Vy5bjbh0dh1aPe97gc55Gbh2bWxhF2g
+      AWS_ACCESS_KEY_ID: ASIA3CDEULUKCE4ELWUK
+      AWS_SECRET_ACCESS_KEY: 2Rud9W/At4QRTDqhX+DSiWVrdAfreKiOI5KpUr4Q
+      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEO///////////wEaCXVzLXdlc3QtMiJHMEUCIQCP0ArxxIWJG4auhgZfU53ZfqPZM7nKucFoDM9sJx0FdgIgW5Xqe6/fZAdpd/gJed5WpbzLS53LPJOgkG09ol+zsEYqrAIIOBAAGgw3NjA0MjAyNjExNDAiDCEfsfL3vGgOrxZLEyqJAsv4n5oky6Wtl9ZX75vkRrr1ETRtMS3es0L5p1YsYpbgQqo0qCgT0jQEOGugCL9204htdxZBPKPCzfcB0C/Te7SFbzGqjmMpKcff0deryAgqQbcN+Yi0Oyyu9rjxlTmZUzsNUgAnFmDwoCs5bPN5/DXfj47MqY2hmA3i3hLZK47JMV8EelggDU00wNiDXjUv/kg5ZPnZ2AE+nEzq0yjbLKugdJDcmk9R1fhBwPSZT9tdtPjO2nzMTaBD+gt3Hz4nEr9sX+BPh7XdEwA87fBP5t6uO8YvLWZ5w0rq15lVUzUSC8Z4MKLF6FWfa9L4j0PIPuOMqa/Q1pE2hJTI+CE0wYUZlubjwMjmPY0w1JGRsQY6nQHX02V+fNFUxt41QqquHSUlxB/NpANQNhslJU/x76ql4tLLknPOdqARyjfoj29Mea7v7ouip488QV/1AzJ4OX7Y8pL6uTYjPGol+jObjVn0OdWwc3VJ3+xJxXuygb3UnvyBcrJqKqZamAHZHxqzPgsdVbaPPFVcYxNcDSnBGeBbKCRtj98sJ67zY6PWt3XeyJ4cDqw51HHj1k8nuC4g
 
     steps:
       - name: Checkout
@@ -92,27 +92,27 @@ jobs:
         id: fmt
         run: terraform fmt 
         continue-on-error: true
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
 
       - name: Terraform Validate
         run: terraform validate -no-color
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
     
       - name: Terraform Plan
         run: terraform plan -input=false -no-color -out tf.plan
         continue-on-error: true
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
 
       - name: Get result
         run: echo "${{ steps.validate.outputs.stdout }}"
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./Network
+        working-directory: ./Terraform/Staging/Network
 
 
   terraform-provision-webserver:
@@ -121,9 +121,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
     #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      AWS_ACCESS_KEY_ID: ASIA3CDEULUKJV4NO2WX
-      AWS_SECRET_ACCESS_KEY: JiGKsiiwyv3n7vpVn58gQzm0U73hWymqvBBHshcY
-      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEOn//////////wEaCXVzLXdlc3QtMiJIMEYCIQCBtaP2KmpmNCqKo9l7hylYIEQTVwkXeIoXJu4YbKgJhwIhAN7x8jYMiwcwEExyN2IG7jwT8TUB1P7wqzKjazeqMwgxKqwCCDIQABoMNzYwNDIwMjYxMTQwIgzcKh/Bop6IrVKi7rwqiQLqbFu0YYLk+ZIM6KGMqEijqnz0t2vlYZdsY7s8AoCPeA1kjwqzFEWEHjqjSNFmuwOQDg8sSApycLPexQV/HzatZ4HEIPNTT3sUr+GwVRngCBDuW3JWCFguZ7wG3pH9VJ1+tGYdMkkDrkc8O3k4arn9h6THwR3Zl+guSkJoZW/9BG7lxLHG/SfbSCmVpg7ubmLVl0XdXRylqtq6pu3FQyg0oeZ98Mk/L7uug62tu6rbJaLAmX7nZ5KW1ZAOeP3Ae6DNM3u1RnrWdVo3K4g7jrRIALX01WR5Oln6gtDyDpqBI8+r1QoTac5YIiMsBdybOS8f+h3g8j3SWWTdc0DIQYNkAQ3XE9COAbrrMO/rj7EGOpwBHzrTmlhLzR6m8bgFhtGa3MKDRn2CseAkvPVi3xGuXgKKevYNxT2e9Xrz71/SSn2egeu5k7RRiWpje89maZe4jGFl8B8O1l2zLo6doPzM7eg0yw7UdHQ7qVxHz6yQ5JaHr55d6JuZtGueBkYmaaMuSIg336jyBeYk04p+1TAjcpWTjUxc7Vy5bjbh0dh1aPe97gc55Gbh2bWxhF2g
+      AWS_ACCESS_KEY_ID: ASIA3CDEULUKCE4ELWUK
+      AWS_SECRET_ACCESS_KEY: 2Rud9W/At4QRTDqhX+DSiWVrdAfreKiOI5KpUr4Q
+      AWS_SESSION_TOKEN: IQoJb3JpZ2luX2VjEO///////////wEaCXVzLXdlc3QtMiJHMEUCIQCP0ArxxIWJG4auhgZfU53ZfqPZM7nKucFoDM9sJx0FdgIgW5Xqe6/fZAdpd/gJed5WpbzLS53LPJOgkG09ol+zsEYqrAIIOBAAGgw3NjA0MjAyNjExNDAiDCEfsfL3vGgOrxZLEyqJAsv4n5oky6Wtl9ZX75vkRrr1ETRtMS3es0L5p1YsYpbgQqo0qCgT0jQEOGugCL9204htdxZBPKPCzfcB0C/Te7SFbzGqjmMpKcff0deryAgqQbcN+Yi0Oyyu9rjxlTmZUzsNUgAnFmDwoCs5bPN5/DXfj47MqY2hmA3i3hLZK47JMV8EelggDU00wNiDXjUv/kg5ZPnZ2AE+nEzq0yjbLKugdJDcmk9R1fhBwPSZT9tdtPjO2nzMTaBD+gt3Hz4nEr9sX+BPh7XdEwA87fBP5t6uO8YvLWZ5w0rq15lVUzUSC8Z4MKLF6FWfa9L4j0PIPuOMqa/Q1pE2hJTI+CE0wYUZlubjwMjmPY0w1JGRsQY6nQHX02V+fNFUxt41QqquHSUlxB/NpANQNhslJU/x76ql4tLLknPOdqARyjfoj29Mea7v7ouip488QV/1AzJ4OX7Y8pL6uTYjPGol+jObjVn0OdWwc3VJ3+xJxXuygb3UnvyBcrJqKqZamAHZHxqzPgsdVbaPPFVcYxNcDSnBGeBbKCRtj98sJ67zY6PWt3XeyJ4cDqw51HHj1k8nuC4g
 
     steps:
       - name: Checkout
@@ -131,8 +131,8 @@ jobs:
 
       - name: Setup SSH
         run: |
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Webserver/projectkey.pub
-          chmod 600 ./Webserver/projectkey.pub
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Terraform/Staging/Webserver/projectkey.pub
+          chmod 600 ./Terraform/Staging/Webserver/projectkey.pub
         shell: bash
 
       - name: Setup Terraform
@@ -145,25 +145,25 @@ jobs:
         id: fmt
         run: terraform fmt 
         continue-on-error: true
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
 
       - name: Terraform Validate
         run: terraform validate -no-color
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
     
       - name: Terraform Plan
         run: terraform plan -input=false -no-color -out tf.plan
         continue-on-error: true
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
 
       - name: Get result
         run: echo "${{ steps.validate.outputs.stdout }}"
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./Webserver
+        working-directory: ./Terraform/Staging/Webserver
         
