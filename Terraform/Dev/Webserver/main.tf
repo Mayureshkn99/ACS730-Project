@@ -3,5 +3,6 @@ provider "aws" {
 }
 
 module "webserver-dev" {
-  source = "../Modules/aws_webserver"
+  source = "../../Modules/aws_webserver"
+  env = "dev"
 }

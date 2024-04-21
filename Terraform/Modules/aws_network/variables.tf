@@ -15,3 +15,9 @@ variable "private_cidr_blocks" {
   type        = list(string)
   description = "Private Subnet CIDRs"
 }
+
+variable "env" {
+  default     = "dev"
+  type        = string
+  description = "Environment"
+}
