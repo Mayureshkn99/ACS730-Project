@@ -21,3 +21,9 @@ variable "prefix" {
   type        = string
   description = "Name prefix"
 }
+
+variable "env" {
+  default     = "dev"
+  type        = string
+  description = "Environment"
+}

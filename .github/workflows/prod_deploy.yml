@@ -1,9 +1,9 @@
-name: "Terraform - Staging"
+name: "Terraform - Production"
 
 on:
   push:
     branches:
-    - staging
+    - prod
 
 permissions:
   contents: read
@@ -29,17 +29,17 @@ jobs:
 
       - name: Setup SSH
         run: |
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Terraform/Staging/Webserver/projectkey.pub
-          chmod 600 ./Terraform/Staging/Webserver/projectkey.pub
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Terraform/Prod/Webserver/projectkey.pub
+          chmod 600 ./Terraform/Prod/Webserver/projectkey.pub
         shell: bash
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
 
   terraform-destroy-network:
     name: "Terraform Destroy Network"
@@ -61,11 +61,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
 
 
   terraform-provision-network:
@@ -92,27 +92,27 @@ jobs:
         id: fmt
         run: terraform fmt 
         continue-on-error: true
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
 
       - name: Terraform Validate
         run: terraform validate -no-color
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
     
       - name: Terraform Plan
         run: terraform plan -input=false -no-color -out tf.plan
         continue-on-error: true
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
 
       - name: Get result
         run: echo "${{ steps.validate.outputs.stdout }}"
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./Terraform/Staging/Network
+        working-directory: ./Terraform/Prod/Network
 
 
   terraform-provision-webserver:
@@ -131,8 +131,8 @@ jobs:
 
       - name: Setup SSH
         run: |
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Terraform/Staging/Webserver/projectkey.pub
-          chmod 600 ./Terraform/Staging/Webserver/projectkey.pub
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ./Terraform/Prod/Webserver/projectkey.pub
+          chmod 600 ./Terraform/Prod/Webserver/projectkey.pub
         shell: bash
 
       - name: Setup Terraform
@@ -145,25 +145,25 @@ jobs:
         id: fmt
         run: terraform fmt 
         continue-on-error: true
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
 
       - name: Terraform Validate
         run: terraform validate -no-color
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
     
       - name: Terraform Plan
         run: terraform plan -input=false -no-color -out tf.plan
         continue-on-error: true
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
 
       - name: Get result
         run: echo "${{ steps.validate.outputs.stdout }}"
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ./Terraform/Staging/Webserver
+        working-directory: ./Terraform/Prod/Webserver
         

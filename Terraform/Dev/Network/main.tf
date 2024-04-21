@@ -3,5 +3,6 @@ provider "aws" {
 }
 
 module "vpc-dev" {
-  source = "../Modules/aws_network"
+  source = "../../Modules/aws_network"
+  env = "dev"
 }

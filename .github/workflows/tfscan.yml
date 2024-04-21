@@ -3,7 +3,9 @@ name: TFSec Scan
 on:
   push:
     branches:
+      - prod
       - staging
+      - develop
 
 jobs:
   tfsec_scan:
