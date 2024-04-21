@@ -3,7 +3,7 @@ name: TFSec Scan
 on:
   push:
     branches:
-      - prod
+      - production
       - staging
       - develop
 
